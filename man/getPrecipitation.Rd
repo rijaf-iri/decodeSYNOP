@@ -7,7 +7,7 @@
 getPrecipitation(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 A named list of numeric vector of length 2, c(duration[in hour], amount [in mm]).\cr 

@@ -2,7 +2,7 @@
 #'
 #' Get the dew point temperature, group \code{2s_nT_dT_dT_d} from section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The dew point temperature in degree Celsius. 
 #' 
@@ -44,7 +44,7 @@ getDewPointTemperature <- function(synop){
 #'
 #' Get the relative humidity, group \code{29UUU} from section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The relative humidity in percentage. 
 #' 

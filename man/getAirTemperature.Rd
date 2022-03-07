@@ -7,7 +7,7 @@
 getAirTemperature(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 The air temperature observation in degree Celsius.

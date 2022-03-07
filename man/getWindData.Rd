@@ -7,7 +7,7 @@
 getWindData(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 A numeric vector of length 2, c(direction [in degree (0-360)], speed [in m/s]).

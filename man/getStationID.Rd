@@ -7,7 +7,7 @@
 getStationID(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 A character, the WMO station ID.

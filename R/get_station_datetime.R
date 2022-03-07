@@ -2,7 +2,7 @@
 #'
 #' Get WMO station ID, group \code{IIiii} of section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A character, the WMO station ID.
 #' 
@@ -27,7 +27,7 @@ getStationID <- function(synop){
 #'
 #' Get the day and hour of a meteorological report, group \code{YYGGiw} of section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A character vector of length 2, c(day, hour).
 #' 
@@ -55,7 +55,7 @@ getObsDateTime <- function(synop){
 #'
 #' Get the actual time of observation if exist, group \code{9GGgg} of section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A character vector of length 2, c(hour, minute). If the \code{9GGgg} group does not exist it returns the hour from the \code{YYGGiw} group and the minute is set to "00". 
 #' 

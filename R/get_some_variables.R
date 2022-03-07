@@ -2,7 +2,7 @@
 #'
 #' Get some variables from a SYNOP (AAXX) strings of weather reports.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A data frame of one row, the columns contain the variables. 
 #' 

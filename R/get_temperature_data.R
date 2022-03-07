@@ -2,7 +2,7 @@
 #'
 #' Get the air temperature observation, group \code{1s_nTTT} from section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The air temperature observation in degree Celsius. 
 #' 
@@ -36,7 +36,7 @@ getAirTemperature <- function(synop){
 #'
 #' Get the maximum temperature observation, group \code{1s_nT_xT_xT_x} from section 333.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The maximum temperature observation in degree Celsius. 
 #' 
@@ -69,7 +69,7 @@ getMaximumTemperature <- function(synop){
 #'
 #' Get the minimum temperature observation, group \code{2s_nT_nT_nT_n} from section 333.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The minimum temperature observation in degree Celsius. 
 #' 

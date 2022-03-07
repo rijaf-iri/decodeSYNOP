@@ -7,7 +7,7 @@
 getObsActualTime(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 A character vector of length 2, c(hour, minute). If the \code{9GGgg} group does not exist it returns the hour from the \code{YYGGiw} group and the minute is set to "00".

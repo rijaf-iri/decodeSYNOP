@@ -2,7 +2,7 @@
 #'
 #' Get wind data, group \code{Nddff} and \code{00fff} if exist.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A numeric vector of length 2, c(direction [in degree (0-360)], speed [in m/s]). 
 #' 

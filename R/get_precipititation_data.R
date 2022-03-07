@@ -2,7 +2,7 @@
 #'
 #' Get precipitation data, group \code{6RRRt_R} from section 1 and group \code{7R_24R_24R_24R_24} from section 333.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return A named list of numeric vector of length 2, c(duration[in hour], amount [in mm]).\cr 
 #' If \code{i_R} from the group \code{i_Ri_XhVV} of section 1 equals 0, it returns a list of length 2,\cr

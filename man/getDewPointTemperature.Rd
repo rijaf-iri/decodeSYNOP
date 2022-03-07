@@ -7,7 +7,7 @@
 getDewPointTemperature(synop)
 }
 \arguments{
-\item{synop}{a synop data object, output of the function \code{get_sectionSynop}.}
+\item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
 The dew point temperature in degree Celsius.

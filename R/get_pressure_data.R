@@ -2,7 +2,7 @@
 #'
 #' Get the station pressure, group \code{3P_oP_oP_oP_o} from section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #' 
 #' @return The station pressure in hectopascal. 
 #' 
@@ -36,7 +36,7 @@ getStationPressure <- function(synop){
 #'
 #' Get the sea level pressure, group \code{4PPPP} from section 1.
 #' 
-#' @param synop a synop data object, output of the function \code{get_sectionSynop}.
+#' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
 #' @return The sea level pressure in hectopascal. 
 #' 
