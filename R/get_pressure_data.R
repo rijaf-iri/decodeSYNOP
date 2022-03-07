@@ -3,7 +3,7 @@
 #' Get the station pressure, group \code{3P_oP_oP_oP_o} from section 1.
 #' 
 #' @param synop a synop data object, output of the function \code{get_sectionSynop}.
-#'  
+#' 
 #' @return The station pressure in hectopascal. 
 #' 
 #' @examples
@@ -23,13 +23,11 @@ getStationPressure <- function(synop){
     ix <- 5
     if(isWindFF99(synop$section1)) ix <- 6
     x <- synop$section1[-(1:ix)]
-    p <- grep("^3", x)
-    
+
     pres <- NA
-    if(length(p) != 0){
-        pres <- as.numeric(substr(x[p], 2, 5)) * 0.1
-        if(pres < 400) pres <- 1000 + pres
-    }
+    p <- grep("^3", x)
+    if(length(p) != 0)
+        pres <- parse_PressureGroup(x[p])
 
     return(pres)
 }
@@ -59,13 +57,22 @@ getSeaLevelPressure <- function(synop){
     ix <- 5
     if(isWindFF99(synop$section1)) ix <- 6
     x <- synop$section1[-(1:ix)]
-    p <- grep("^4", x)
-    
+
     pres <- NA
-    if(length(p) != 0){
-        pres <- as.numeric(substr(x[p], 2, 5)) * 0.1
-        if(pres < 400) pres <- 1000 + pres
-    }
+    p <- grep("^4", x)
+    if(length(p) != 0)
+        pres <- parse_PressureGroup(x[p])
 
     return(pres)
 }
+
+parse_PressureGroup <- function(x){
+    pres <- substr(x, 2, 5)
+    if(pres != "////"){
+        pr <- as.numeric(pres) * 0.1
+        if(pr < 400) pr <- 1000 + pr
+    }else pr <- NA
+
+    return(pr)
+}
+

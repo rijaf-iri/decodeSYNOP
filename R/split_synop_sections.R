@@ -20,9 +20,9 @@
 
 getSynopSections <- function(synop){
     synop <- split_rawSynop_Data(synop)
-    i2 <- grep("222//", synop)
-    i3 <- grep("333", synop)
-    i5 <- grep("555", synop)
+    i2 <- grep("^222//$", synop)
+    i3 <- grep("^333$", synop)
+    i5 <- grep("^555$", synop)
 
     out <- vector('list', 4)
 

@@ -23,7 +23,7 @@ Get precipitation data, group \code{6RRRt_R} from section 1 and group \code{7R_2
 \dontrun{
 aaxx <- "AAXX 07181 33837 11583 83102 10039 29072 30049 40101 52035 60012="
 synop <- getSynopSections(aaxx)
-pres <- getPrecipitation(synop)
+precip <- getPrecipitation(synop)
 }
 
 }

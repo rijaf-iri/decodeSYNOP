@@ -20,7 +20,7 @@ Get the relative humidity, group \code{29UUU} from section 1.
 \dontrun{
 aaxx <- "AAXX 07181 33837 11583 83102 10039 29072 30049 40101 52035 60012="
 synop <- getSynopSections(aaxx)
-td <- getRelativeHumidity(synop)
+rh <- getRelativeHumidity(synop)
 }
 
 }

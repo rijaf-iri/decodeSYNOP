@@ -28,9 +28,12 @@ getDewPointTemperature <- function(synop){
     td <- NA
     if(length(p) != 0){
         sn <- substr(x[p], 2, 2)
-        if(sn != "9"){
-            sgn <- switch(sn, "0" = 1, "1" = -1)
-            td <- sgn * as.numeric(substr(x[p], 3, 5)) * 0.1
+        t2 <- substr(x[p], 3, 5)
+        if(t2 != "///" & sn != "/"){
+            if(sn != "9"){
+                sgn <- switch(sn, "0" = 1, "1" = -1)
+                td <- sgn * as.numeric(t2) * 0.1
+            }
         }
     }
 
@@ -50,7 +53,7 @@ getDewPointTemperature <- function(synop){
 #' \dontrun{
 #' aaxx <- "AAXX 07181 33837 11583 83102 10039 29072 30049 40101 52035 60012="
 #' synop <- getSynopSections(aaxx)
-#' td <- getRelativeHumidity(synop)
+#' rh <- getRelativeHumidity(synop)
 #' }
 #' 
 #' @export
@@ -67,8 +70,10 @@ getRelativeHumidity <- function(synop){
     rh <- NA
     if(length(p) != 0){
         sn <- substr(x[p], 2, 2)
-        if(sn == "9"){
-            rh <- as.numeric(substr(x[p], 3, 5))
+        t2 <- substr(x[p], 3, 5)
+        if(t2 != "///" & sn != "/"){
+            if(sn == "9")
+                rh <- as.numeric(t2)
         }
     }
 

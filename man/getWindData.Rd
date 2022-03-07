@@ -20,7 +20,7 @@ Get wind data, group \code{Nddff} and \code{00fff} if exist.
 \dontrun{
 aaxx <- "AAXX 28154 89022 42698 72506 11360 21382 39758 49808 52006 875// 333 87635="
 synop <- getSynopSections(aaxx)
-pres <- getWindData(synop)
+wnd <- getWindData(synop)
 }
 
 }

@@ -23,13 +23,11 @@ getAirTemperature <- function(synop){
     ix <- 5
     if(isWindFF99(synop$section1)) ix <- 6
     x <- synop$section1[-(1:ix)]
-    p <- grep("^1", x)
-    
     tmp <- NA
-    if(length(p) != 0){
-        sgn <- switch(substr(x[p], 2, 2), "0" = 1, "1" = -1)
-        tmp <- sgn * as.numeric(substr(x[p], 3, 5)) * 0.1
-    }
+
+    p <- grep("^1", x)
+    if(length(p) != 0)
+        tmp <- parse_temperatureGroup(x[p])
 
     return(tmp)
 }
@@ -56,18 +54,13 @@ getMaximumTemperature <- function(synop){
     if(!inherits(synop, "synop"))
         stop("synop is not a 'synop' data object")
 
-    x <- synop$section3
     tx <- NA
+    x <- synop$section3
     if(length(x) == 0) return(tx)
 
     p <- grep("^1", x)
-    if(length(p) != 0){
-        sn <- substr(x[p], 2, 2)
-        if(sn != "9"){
-            sgn <- switch(sn, "0" = 1, "1" = -1)
-            tx <- sgn * as.numeric(substr(x[p], 3, 5)) * 0.1
-        }
-    }
+    if(length(p) != 0)
+        tx <- parse_temperatureGroup(x[p])
 
     return(tx)
 }
@@ -85,7 +78,7 @@ getMaximumTemperature <- function(synop){
 #' \dontrun{
 #' aaxx <- "AAXX 28154 89022 42698 72506 333 10312 20195="
 #' synop <- getSynopSections(aaxx)
-#' tmax <- getMinimumTemperature(synop)
+#' tmin <- getMinimumTemperature(synop)
 #' }
 #' 
 #' @export
@@ -94,18 +87,24 @@ getMinimumTemperature <- function(synop){
     if(!inherits(synop, "synop"))
         stop("synop is not a 'synop' data object")
 
-    x <- synop$section3
     tn <- NA
+    x <- synop$section3
     if(length(x) == 0) return(tn)
 
     p <- grep("^2", x)
-    if(length(p) != 0){
-        sn <- substr(x[p], 2, 2)
-        if(sn != "9"){
-            sgn <- switch(sn, "0" = 1, "1" = -1)
-            tn <- sgn * as.numeric(substr(x[p], 3, 5)) * 0.1
-        }
-    }
+    if(length(p) != 0)
+        tn <- parse_temperatureGroup(x[p])
 
     return(tn)
+}
+
+parse_temperatureGroup <- function(x){
+    sgn <- substr(x, 2, 2)
+    tmp <- substr(x, 3, 5)
+    if(tmp != "///" & sgn != "/"){
+        sgn <- switch(sgn, "0" = 1, "1" = -1)
+        tm <- sgn * as.numeric(tmp) * 0.1
+    }else tm <- NA
+
+    return(tm)
 }

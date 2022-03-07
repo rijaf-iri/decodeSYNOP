@@ -20,7 +20,7 @@ Get the minimum temperature observation, group \code{2s_nT_nT_nT_n} from section
 \dontrun{
 aaxx <- "AAXX 28154 89022 42698 72506 333 10312 20195="
 synop <- getSynopSections(aaxx)
-tmax <- getMinimumTemperature(synop)
+tmin <- getMinimumTemperature(synop)
 }
 
 }

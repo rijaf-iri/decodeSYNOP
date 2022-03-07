@@ -14,7 +14,7 @@
 #' \dontrun{
 #' aaxx <- "AAXX 07181 33837 11583 83102 10039 29072 30049 40101 52035 60012="
 #' synop <- getSynopSections(aaxx)
-#' pres <- getPrecipitation(synop)
+#' precip <- getPrecipitation(synop)
 #' }
 #' 
 #' @export
@@ -55,12 +55,12 @@ get_precip_section1 <- function(synop){
     ix <- 5
     if(isWindFF99(synop$section1)) ix <- 6
     x <- synop$section1[-(1:ix)]
-    p <- grep("^6", x)
-    rrr <- as.numeric(substr(x[p], 2, 4))
-    tr <- substr(x[p], 5, 5)
-    duration <- switch(tr, "1" = 6, "2" = 12, "3" = 18, "4" = 24,
-                    "5" = 1, "6" = 2, "7" = 3, "8" = 9, "9" = 15)
 
+    p <- grep("^6", x)
+    rrr <- substr(x[p], 2, 4)
+    if(rrr == "///") return(c(NA, NA))
+
+    rrr <- as.numeric(rrr)
     if(rrr == 990){
         ## Trace
         precip <- 0.01
@@ -69,7 +69,13 @@ get_precip_section1 <- function(synop){
     }else{
         precip <- rrr
     }
- 
+
+    tr <- substr(x[p], 5, 5)
+    if(tr != "/"){
+        duration <- switch(tr, "1" = 6, "2" = 12, "3" = 18, "4" = 24,
+                        "5" = 1, "6" = 2, "7" = 3, "8" = 9, "9" = 15)
+    }else duration <- NA
+
     return(c(duration, precip))
 }
 
@@ -78,9 +84,12 @@ get_precip_section3 <- function(synop){
         stop("synop is not a 'synop' data object")
 
     x <- synop$section3
-    p <- grep("^7", x)
-    rrrr <- as.numeric(substr(x[p], 2, 5))
 
+    p <- grep("^7", x)
+    rrrr <- substr(x[p], 2, 5)
+    if(rrrr == "////") return(c(NA, NA))
+
+    rrrr <- as.numeric(rrrr)
     if(rrrr == 9999){
         ## Trace
         precip <- 0.01

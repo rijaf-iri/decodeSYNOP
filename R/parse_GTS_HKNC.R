@@ -1,22 +1,23 @@
-#' Parse GTS HKNC Bulletins.
+#' Parse GTS Bulletins.
 #'
-#' Parse GTS bulletins file from Kenya Meteorological Department (HKNC).
+#' Parse GTS bulletin files from Regional Telecommunication Hub (RTH).
 #' 
-#' @param file_HKNC full path to the file containing the GTS bulletins.
+#' @param bulletin_file full path to the file containing the GTS bulletin.
 #'  
 #' @return A vector of the SYNOP (AAXX) strings of weather reports.
 #' 
 #' @examples
 #' 
 #' \dontrun{
+#' # GTS bulletin file from Kenya Meteorological Department (HKNC)
 #' file_HKNC <- "~/HKNC_bulletins/HKNC50044537.a"
-#' synop_strings <- parse_GTS_HKNC_Bulletins(file_HKNC)
+#' synop_strings <- parse_GTS_Bulletin(file_HKNC)
 #' }
 #' 
 #' @export
 
-parse_GTS_HKNC_Bulletins <- function(file_HKNC){
-    rawData <- readLines(file_HKNC, skipNul = TRUE, warn = FALSE)
+parse_GTS_Bulletin <- function(bulletin_file){
+    rawData <- readLines(bulletin_file, skipNul = TRUE, warn = FALSE)
     rawData <- trimws(rawData)
     rawData <- rawData[rawData != ""]
 
