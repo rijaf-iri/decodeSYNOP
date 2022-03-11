@@ -30,7 +30,7 @@ getDewPointTemperature <- function(synop){
         p <- p[1]
         sn <- substr(x[p], 2, 2)
         t2 <- substr(x[p], 3, 5)
-        if(t2 != "///" & sn != "/"){
+        if(!grepl("/", t2) & sn != "/"){
             if(sn != "9"){
                 sgn <- switch(sn, "0" = 1, "1" = -1)
                 td <- sgn * as.numeric(t2) * 0.1
@@ -73,7 +73,7 @@ getRelativeHumidity <- function(synop){
         p <- p[1]
         sn <- substr(x[p], 2, 2)
         t2 <- substr(x[p], 3, 5)
-        if(t2 != "///" & sn != "/"){
+        if(!grepl("/", t2) & sn != "/"){
             if(sn == "9")
                 rh <- as.numeric(t2)
         }
