@@ -27,6 +27,7 @@ getDewPointTemperature <- function(synop){
     
     td <- NA
     if(length(p) != 0){
+        p <- p[1]
         sn <- substr(x[p], 2, 2)
         t2 <- substr(x[p], 3, 5)
         if(t2 != "///" & sn != "/"){
@@ -69,6 +70,7 @@ getRelativeHumidity <- function(synop){
     
     rh <- NA
     if(length(p) != 0){
+        p <- p[1]
         sn <- substr(x[p], 2, 2)
         t2 <- substr(x[p], 3, 5)
         if(t2 != "///" & sn != "/"){

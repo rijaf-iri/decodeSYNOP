@@ -26,8 +26,10 @@ getStationPressure <- function(synop){
 
     pres <- NA
     p <- grep("^3", x)
-    if(length(p) != 0)
+    if(length(p) != 0){
+        p <- p[1]
         pres <- parse_PressureGroup(x[p])
+    }
 
     return(pres)
 }
@@ -60,8 +62,10 @@ getSeaLevelPressure <- function(synop){
 
     pres <- NA
     p <- grep("^4", x)
-    if(length(p) != 0)
+    if(length(p) != 0){
+        p <- p[1]
         pres <- parse_PressureGroup(x[p])
+    }
 
     return(pres)
 }

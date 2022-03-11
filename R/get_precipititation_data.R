@@ -57,6 +57,7 @@ get_precip_section1 <- function(synop){
     x <- synop$section1[-(1:ix)]
 
     p <- grep("^6", x)
+    p <- p[1]
     rrr <- substr(x[p], 2, 4)
     if(rrr == "///") return(c(NA, NA))
 
@@ -86,6 +87,7 @@ get_precip_section3 <- function(synop){
     x <- synop$section3
 
     p <- grep("^7", x)
+    p <- p[1]
     rrrr <- substr(x[p], 2, 5)
     if(rrrr == "////") return(c(NA, NA))
 

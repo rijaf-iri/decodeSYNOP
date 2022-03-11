@@ -26,8 +26,10 @@ getAirTemperature <- function(synop){
     tmp <- NA
 
     p <- grep("^1", x)
-    if(length(p) != 0)
+    if(length(p) != 0){
+        p <- p[1]
         tmp <- parse_temperatureGroup(x[p])
+    }
 
     return(tmp)
 }
@@ -59,8 +61,10 @@ getMaximumTemperature <- function(synop){
     if(length(x) == 0) return(tx)
 
     p <- grep("^1", x)
-    if(length(p) != 0)
+    if(length(p) != 0){
+        p <- p[1]
         tx <- parse_temperatureGroup(x[p])
+    }
 
     return(tx)
 }
@@ -92,8 +96,10 @@ getMinimumTemperature <- function(synop){
     if(length(x) == 0) return(tn)
 
     p <- grep("^2", x)
-    if(length(p) != 0)
+    if(length(p) != 0){
+        p <- p[1]
         tn <- parse_temperatureGroup(x[p])
+    }
 
     return(tn)
 }
@@ -101,7 +107,7 @@ getMinimumTemperature <- function(synop){
 parse_temperatureGroup <- function(x){
     sgn <- substr(x, 2, 2)
     tmp <- substr(x, 3, 5)
-    if(tmp != "///" & sgn != "/"){
+    if(!grepl("/", tmp) & sgn != "/"){
         sgn <- switch(sgn, "0" = 1, "1" = -1)
         tm <- sgn * as.numeric(tmp) * 0.1
     }else tm <- NA
