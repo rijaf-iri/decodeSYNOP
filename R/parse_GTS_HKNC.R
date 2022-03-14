@@ -47,7 +47,20 @@ parse_GTS_Bulletin <- function(bulletin_file){
             x <- list(x[ix1:length(x)])
         }
 
-        x <- lapply(x, parse_AAXX)
+        x <- lapply(x, function(v){
+            iv <- grep("AAXX", v)
+            if(substr(v[iv], 5, 5) != " "){
+                v[iv] <- paste(substr(v[iv], 1, 4), substr(v[iv], 5, 9))
+            }
+            v
+        })
+
+        x <- lapply(x, function(v){
+            ox <- try(parse_AAXX(v), silent = TRUE)
+            if(inherits(ox, "try-error")) return(NULL)
+            ox
+        })
+        
         do.call(c, x)
     })
 
