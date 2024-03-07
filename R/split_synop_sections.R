@@ -72,6 +72,7 @@ getSynopSections <- function(synop){
 split_rawSynop_Data <- function(synop){
     synop <- strsplit(synop, ' ')
     synop <- trimws(synop[[1]])
+    synop <- gsub("[^ -~]+", "", synop)
 
     synop[synop != ""]
 }

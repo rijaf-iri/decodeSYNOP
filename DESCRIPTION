@@ -1,5 +1,5 @@
 Package: decodeSYNOP
-Version: 1.0
+Version: 1.5
 Title: Parse and decode SYNOP code
 Description: Parse and decode surface synoptic observations SYNOP (AAXX).
 Author: Rija Faniriantsoa <rijaf@iri.columbia.edu>
@@ -7,4 +7,4 @@ Maintainer: Rija Faniriantsoa <rijaf@iri.columbia.com>
 License: GPL-3
 Encoding: UTF-8
 Date: 2022-03-06
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

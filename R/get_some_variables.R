@@ -1,6 +1,6 @@
 #' Get Meteorological Observations.
 #'
-#' Get some variables from a SYNOP (AAXX) strings of weather reports.
+#' Get the data from a selected variables from a SYNOP (AAXX) strings of weather reports.
 #' 
 #' @param synop a synop data object, output of the function \code{getSynopSections}.
 #'  
@@ -11,12 +11,12 @@
 #' \dontrun{
 #' aaxx <- "AAXX 07181 33837 11583 83102 10039 21007 30049 40101 52035 60012 70282 8255/="
 #' synop <- getSynopSections(aaxx)
-#' df <- get_Some_Variables(synop)
+#' df <- get_Synop_Data(synop)
 #' }
 #' 
 #' @export
 
-get_Some_Variables <- function(synop){
+get_Synop_Data <- function(synop){
     tm <- getAirTemperature(synop)
     tx <- getMaximumTemperature(synop)
     tn <- getMinimumTemperature(synop)
