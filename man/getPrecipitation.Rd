@@ -10,13 +10,12 @@ getPrecipitation(synop)
 \item{synop}{a synop data object, output of the function \code{getSynopSections}.}
 }
 \value{
-A named list of numeric vector of length 2, c(duration[in hour], amount [in mm]).\cr 
-If \code{i_R} from the group \code{i_Ri_XhVV} of section 1 equals 0, it returns a list of length 2,\cr
-first element is the precipitation from section 1 group \code{6RRRt_R} \cr
-and the second element from section 333 group \code{7R_24R_24R_24R_24}.
+A named list of numeric vector of length 2,\cr
+the first element of the list is a vector of length 2: c(duration[in hour], amount [in mm]) from section 1,
+the second element is a vector length 3: c(duration[in hour], amount [in mm], amount past 24 hour [in mm]) from section 3.
 }
 \description{
-Get precipitation data, group \code{6RRRt_R} from section 1 and group \code{7R_24R_24R_24R_24} from section 333.
+Get precipitation data, group \code{6RRRt_R} from section 1 and 3, and group \code{7R_{24}R_{24}R_{24}R_{24}} from section 3.
 }
 \examples{
 

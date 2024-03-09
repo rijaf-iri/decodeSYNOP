@@ -64,7 +64,6 @@ getSynopSections <- function(synop){
     }
     names(out) <- paste0('section', c(1, 2, 3, 5))
     class(out) <- append(class(out), "synop")
-    return(out)
 
     return(out)
 }
@@ -73,17 +72,28 @@ split_rawSynop_Data <- function(synop){
     synop <- strsplit(synop, ' ')
     synop <- trimws(synop[[1]])
     synop <- gsub("[^ -~]+", "", synop)
+    nl <- length(synop)
+    synop[nl] <- gsub('=', '', synop[nl])
+    synop <- synop[synop != ""]
+    iw <- substr(synop[2], 5, 5)
+    if(iw != "/"){
+        if(grepl('[A-Z]', synop[2])){
+            synop <- synop[-2]
+        }
+    }
 
-    synop[synop != ""]
+    return(synop)
 }
 
 isWindFF99 <- function(x){
     iw <- substr(x[2], 5, 5)
-    ff <- substr(x[5], 4, 5)
     out <- FALSE
     if(iw != "/"){
-        if(ff != "//"){
-            if(ff == "99") out <- TRUE
+        if(length(x) >= 5){
+            ff <- substr(x[5], 4, 5)
+            if(ff != "//"){
+                if(ff == "99") out <- TRUE
+            }
         }
     }
 

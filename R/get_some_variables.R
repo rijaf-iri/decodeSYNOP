@@ -1,4 +1,4 @@
-#' Get Meteorological Observations.
+#' Surface observation report from land station (FM-12).
 #'
 #' Get the data from a selected variables from a SYNOP (AAXX) strings of weather reports.
 #' 
@@ -27,16 +27,14 @@ get_Synop_Data <- function(synop){
     wnd <- getWindData(synop)
     prcp <- getPrecipitation(synop)
 
-    if(is.null(prcp$section1))
-       precip <- c(NA, NA, prcp$section3) 
+    precip <- c(prcp$section1, prcp$section3)
 
-    if(is.null(prcp$section3))
-        precip <- c(prcp$section1, NA, NA)
-
-    if(is.na(td) & !is.na(rh) & !is.na(tm))
+    if(is.na(td) & !is.na(rh) & !is.na(tm)){
         td <- round(dewpoint_temperature(tm, rh), 1)
-    if(!is.na(td) & is.na(rh) & !is.na(tm))
+    }
+    if(!is.na(td) & is.na(rh) & !is.na(tm)){
         rh <- round(relative_humidity(tm, td), 1)
+    }
 
     stn <- getStationID(synop)
     ddhh <- getObsDateTime(synop)
@@ -46,7 +44,7 @@ get_Synop_Data <- function(synop){
     dat[, -(1:3)] <- as.numeric(dat[, -(1:3)])
     names(dat) <- c('WMOID', 'Day', 'Hour', 'AirTemp', 'Tmax', 'Tmin',
                     'TempDew', 'RH', 'SurfPres', 'SLPres', 'Wind_dd', 'Wind_ff',
-                    'RR_Duration_Sec1', 'RR_Amount_Sec1', 'RR_Duration_Sec333',
-                    'RR_Amount_Sec333')
+                    'RR_Duration_Sec1', 'RR_Amount_Sec1', 'RR_Duration_Sec3',
+                    'RR_Amount_Sec3', 'RR_Amount_24h')
     return(dat)
 }

@@ -20,9 +20,11 @@ getWindData <- function(synop){
     if(!inherits(synop, "synop"))
         stop("synop is not a 'synop' data object")
 
+    if(!isWindFF99(synop$section1)) return(c(NA, NA))
+
     dd <- substr(synop$section1[5], 2, 3)
     out_dd <- NA
-    if(dd != "//"){
+    if(!grepl('\\/', dd)){
         if(dd != "99"){
            out_dd <- as.numeric(dd) * 10
         }
@@ -30,11 +32,16 @@ getWindData <- function(synop){
 
     iw <- substr(synop$section1[2], 5, 5)
     out_ff <- NA
-    if(iw != "/"){
+    if(iw != "/" && iw != ""){
         ff <- substr(synop$section1[5], 4, 5)
-        if(ff != "//"){
+        if(!grepl('\\/', ff)){
             if(ff == "99"){
-                ff <- substr(synop$section1[6], 3, 5)
+                grp0 <- synop$section1[6]
+                if(substr(grp0, 1, 1) == '0'){
+                    ff <- substr(grp0, 3, 5)
+                }else{
+                    ff <- NA
+                }
             }
 
             out_ff <- as.numeric(ff)

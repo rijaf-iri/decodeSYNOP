@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_some_variables.R
 \name{get_Synop_Data}
 \alias{get_Synop_Data}
-\title{Get Meteorological Observations.}
+\title{Surface observation report from land station (FM-12).}
 \usage{
 get_Synop_Data(synop)
 }

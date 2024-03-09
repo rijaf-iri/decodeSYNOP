@@ -107,10 +107,13 @@ getMinimumTemperature <- function(synop){
 parse_temperatureGroup <- function(x){
     sgn <- substr(x, 2, 2)
     tmp <- substr(x, 3, 5)
-    if(!grepl("/", tmp) & sgn != "/"){
-        sgn <- switch(sgn, "0" = 1, "1" = -1)
-        tm <- sgn * as.numeric(tmp) * 0.1
-    }else tm <- NA
+    tm <- NA
+    if(!grepl("\\/", tmp) & sgn != "/"){
+        if(sgn %in% c("0", "1")){
+            sgn <- switch(sgn, "0" = 1, "1" = -1)
+            tm <- sgn * as.numeric(tmp) * 0.1
+        }
+    }
 
     return(tm)
 }

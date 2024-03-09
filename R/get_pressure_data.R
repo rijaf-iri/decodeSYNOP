@@ -72,11 +72,13 @@ getSeaLevelPressure <- function(synop){
 
 parse_PressureGroup <- function(x){
     pres <- substr(x, 2, 5)
-    if(!grepl("/", pres)){
+    pr <- NA
+    if(!grepl("\\/", pres) && pres != ""){
         pr <- as.numeric(pres) * 0.1
-        if(pr < 400) pr <- 1000 + pr
-    }else pr <- NA
+        if(!is.na(pr)){
+            if(pr < 400) pr <- 1000 + pr
+        }
+    }
 
     return(pr)
 }
-
