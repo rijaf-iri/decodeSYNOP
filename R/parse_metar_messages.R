@@ -5,8 +5,8 @@
 #' @param metar character, the full strings of the metar code.\cr
 #'              Example: "METAR HUEN 230700Z 08008KT 9999 SCT022 FEW025 26/22 Q1016 NOSIG="
 #'  
-#' @return a list of the day, hour, minute, ICAO ID, wind speed and direction, 
-#' temperature, dew point and pressure (QNH).
+#' @return a list of the ICAO location indicator, day, hour, minute, wind speed and direction, 
+#' temperature, dew point and QNH.
 #' 
 #' @examples
 #' 
@@ -21,44 +21,42 @@
 
 get_Metar_Data <- function(metar){
     msg <- split_rawMetar_Data(metar)
-    if(is.null(msg)){
-        warning('Ambiguous METAR message.')
-        return(NULL)
-    }
-    out <- list(day = NA, hour = NA, minute = NA,
-                icao_id = NA, indicator = NA,
+    if(is.null(msg)) return(NULL)
+    if(msg[4] == "NIL") return(NULL)
+
+    out <- list(icaoLOC = NA, Day = NA,
+                Hour = NA, Minute = NA,
+                indicator = NA,
                 wind_dir = NA, wind_gust = NA,
                 wind_spd = NA, wind_dir_var1 = NA,
                 wind_dir_var2 = NA, air_temp = NA,
-                dew_temp = NA, pressure = NA)
+                dew_temp = NA, QNH = NA)
 
-    out$icao_id <- msg[2]
-    out$day <- substr(msg[3], 1, 2)
-    out$hour <- substr(msg[3], 3, 4)
-    out$minute <- substr(msg[3], 5, 6)
+    out$icaoLOC <- msg[2]
+    out$Day <- substr(msg[3], 1, 2)
+    out$Hour <- substr(msg[3], 3, 4)
+    out$Minute <- substr(msg[3], 5, 6)
 
-   if(msg[4] == "NIL") return(NULL)
+    indicator <- FALSE
+    if(msg[4] == "AUTO"){
+        out$indicator <- msg[4]
+        msg <- msg[-(1:4)]
+        indicator <- TRUE
+    }
 
-   indicator <- FALSE
-   if(msg[4] == "AUTO"){
-      out$indicator <- msg[4]
-      msg <- msg[-(1:4)]
-      indicator <- TRUE
-   }
+    if(nchar(msg[4]) == 3){
+        out$indicator <- msg[4]
+        msg <- msg[-(1:4)]
+        indicator <- TRUE
+    }
 
-   if(nchar(msg[4]) == 3){
-      out$indicator <- msg[4]
-      msg <- msg[-(1:4)]
-      indicator <- TRUE
-   }
+    if(!indicator) msg <- msg[-(1:3)]
 
-   if(!indicator) msg <- msg[-(1:3)]
-
-   ## wind direction and speed
-   dd <- substr(msg[1], 1, 3)
-   out$wind_dir <- dd
-   if(dd == "///") out$wind_dir <- NA
-   if(dd == "VRB") out$wind_dir <- "VRB"
+    ## wind direction and speed
+    dd <- substr(msg[1], 1, 3)
+    out$wind_dir <- dd
+    if(grepl('\\/', dd)) out$wind_dir <- NA
+    if(dd == "VRB") out$wind_dir <- "VRB"
 
     if(substr(msg[1], 4, 4) == "P"){
         # ff <- substr(msg[1], 5, 6)
@@ -69,14 +67,17 @@ get_Metar_Data <- function(metar){
         out$wind_spd <- 50
     }else{
         ff <- substr(msg[1], 4, 5)
-        if(ff == "//"){
-            out$wind_spd <- NA
-        }else{
-            out$wind_spd <- as.numeric(ff)
+        if(!grepl('\\/', ff)){
+            if(!grepl('[^[:digit:]]', ff)){
+                out$wind_spd <- as.numeric(ff)
+            }
         }
 
         if(substr(msg[1], 6, 6) == "G"){
-            out$wind_gust <- as.numeric(substr(msg[1], 7, 8))
+            gust <- substr(msg[1], 7, 8)
+            if(!grepl('[^[:digit:]]', gust)){
+                out$wind_gust <- as.numeric(gust)
+            }
             fu <- substr(msg[1], 9, nchar(msg[1]))
         }else{
             fu <- substr(msg[1], 6, nchar(msg[1]))
@@ -134,7 +135,7 @@ get_Metar_Data <- function(metar){
     pattern_pr <- "^[Q][0-9]{4}"
     pres <- grep(pattern_pr, msg, value = TRUE)
     if(length(pres) > 0){
-       out$pressure <- as.numeric(substr(pres[1], 2, 5))
+       out$QNH <- as.numeric(substr(pres[1], 2, 5))
     }
 
     if(!'CAVOK' %in% msg){
@@ -181,6 +182,8 @@ split_rawMetar_Data <- function(metar){
     metar[nl] <- gsub("=", "", metar[nl])
     metar <- metar[metar != ""]
     metar <- gsub("[^ -~]+", "", metar)
+    if(length(metar) < 4) return(NULL)
+
     # remove code COR: correction to a previously 
     # disseminated observation
     if(metar[2] == 'COR') metar <- metar[-2]

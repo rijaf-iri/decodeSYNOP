@@ -11,8 +11,8 @@ get_Metar_Data(metar)
 Example: "METAR HUEN 230700Z 08008KT 9999 SCT022 FEW025 26/22 Q1016 NOSIG="}
 }
 \value{
-a list of the day, hour, minute, ICAO ID, wind speed and direction, 
-temperature, dew point and pressure (QNH).
+a list of the ICAO location indicator, day, hour, minute, wind speed and direction, 
+temperature, dew point and QNH.
 }
 \description{
 Get data from METAR strings of weather reports.
