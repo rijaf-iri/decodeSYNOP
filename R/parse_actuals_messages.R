@@ -50,6 +50,11 @@ get_Vekn_Data <- function(vekn){
         if(vk[5] == "NIL=") return(NULL)
     }
 
+    acts <- grep("ACTUALS*", vk)
+    if(length(acts) > 0){
+        vk <- vk[-acts]
+    }
+
     ###
     out <- list(icaoLOC = NA, wmoID = NA)
     out$icaoLOC <- vk[2]
@@ -71,7 +76,11 @@ get_Vekn_Data <- function(vekn){
             # out$wmoID <- regmatches(vk[4], tmp)[[1]][2]
             out$wmoID <- gsub(".*\\((.+)\\).*", "\\1", vk[4])
             vekn <- paste0(vk[-(1:4)], collapse = " ")
+        }else if(grepl("^[A-Z]+\\.*$", vk[4])){
+            out$wmoID <- gsub('[^[:alpha:]]', '', vk[4])
+            vekn <- paste0(vk[-(1:4)], collapse = " ")
         }else{
+            out$wmoID <- "UNKNOWN"
             vekn <- paste0(vk[-(1:3)], collapse = " ")
         }
     }
