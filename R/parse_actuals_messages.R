@@ -5,7 +5,7 @@
 #' @param vekn character, the full strings of the \code{VEKN} code.\cr
 #'              Example: "VEKN20 HKNC 260600 63741 MAX 26.3 MIN 17.7 A/R NIL RH 81\%="
 #'  
-#' @return a list of the ICAO ID, WMO ID , day, hour, minute, precipitation,  
+#' @return a list of the ICAO location indicator, WMO ID , day, hour, minute, precipitation,  
 #' maximum and minimum temperature, dry and wet bulb, dew point and vapor pressure.
 #' 
 #' @examples
@@ -42,6 +42,8 @@ get_Vekn_Data <- function(vekn){
     ptrn <- '[0-9]+\\.\\.+[0-9]+'
     vekn <- replace_gregexpr(vekn, ptrn, '\\.+', '.')
     vekn <- gsub('\\.\\.+', ' ', vekn)
+    ptrn <- '[0-9]+\\.[0-9]+\\.'
+    vekn <- replace_gregexpr(vekn, ptrn, '\\.$', '')
 
     vk <- trimws(strsplit(vekn, " ")[[1]])
     if(length(vk) >= 5){
@@ -49,13 +51,13 @@ get_Vekn_Data <- function(vekn){
     }
 
     ###
-    out <- list(icaoID = NA, wmoID = NA)
-    out$icaoID <- vk[2]
+    out <- list(icaoLOC = NA, wmoID = NA)
+    out$icaoLOC <- vk[2]
 
     if(grepl("^[0-9]{6}$", vk[3])){
-        out$day <- substr(vk[3], 1, 2)
-        out$hour <- substr(vk[3], 3, 4)
-        out$minute <- substr(vk[3], 5, 6)
+        out$Day <- substr(vk[3], 1, 2)
+        out$Hour <- substr(vk[3], 3, 4)
+        out$Minute <- substr(vk[3], 5, 6)
     }else{
         return(NULL)
     }
@@ -79,7 +81,7 @@ get_Vekn_Data <- function(vekn){
     rh <- c('R\\/H', 'RH', 'R\\.H')
     tx <- c('MAX', 'Max', 'MX', 'TX')
     tn <- c('MIN', 'Min', 'MN', 'TN')
-    gn <- c('G\\/MIN', 'GMIN', 'LGM', 'G\\/M', 'G\\/MN', 'LGMIN', 'GM')
+    gn <- c('G\\/MIN', 'GMIN', 'LGM', 'G\\/M', 'G\\/MN', 'LGMIN', 'GM', 'G/\\s+MIN')
     db <- c('DB', 'DBT')
     wb <- c('WB', 'WBT')
     dp <- c('DP', 'DEW\\s*POINT\\s*TEMP')
@@ -92,6 +94,11 @@ get_Vekn_Data <- function(vekn){
                   'temperature_max', 'temperature_min',
                   'G_MIN', 'dry_bulb', 'wet_bulb',
                   'dew_point', 'vapor_pressure')
+
+    ###
+    if(grepl('G/\\s+MIN', vekn)){
+        vekn <- gsub('G/\\s+MIN', 'G/MIN', vekn)
+    }
 
     ###
     vekn <- clean_vekn_variables(vekn, patterns)
@@ -114,14 +121,14 @@ get_Vekn_Data <- function(vekn){
         ptrn <- paste0(ptrn, collapse = '|')
         ix <- grep(ptrn, vekn)
         if(length(ix) == 0) return(NA)
-        vr <- vekn[ix + 1]
-        if(ploc == precip){
+        vr <- vekn[ix + 1][1]
+        if(ploc == precip & !is.na(vr)){
             rtrace <- tolower(substr(vr, 1, 2))
             if(rtrace[1] == 'tr') vr <- '0.1'
         }
+        if(grepl('[a-zA-Z]', vr)) return(NA)
         vr <- gsub("[^0-9.]", "", vr)
-        vr <- as.numeric(vr)
-        vr[1]
+        as.numeric(vr)
     })
     names(tmp) <- var_name
 
