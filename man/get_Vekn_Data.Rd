@@ -4,14 +4,17 @@
 \alias{get_Vekn_Data}
 \title{Parse ACTUALS messages.}
 \usage{
-get_Vekn_Data(vekn)
+get_Vekn_Data(vekn, stn_list = NULL)
 }
 \arguments{
 \item{vekn}{character, the full strings of the \code{VEKN} code.\cr
 Example: "VEKN20 HKNC 260600 63741 MAX 26.3 MIN 17.7 A/R NIL RH 81\%="}
+
+\item{stn_list}{a vector of character, containing a list of station names 
+for special case like "VEKN75 HKNC 040600 KITUI MAX 29.2 MIN 17.5 A/R NIL MM RH 60\%="}
 }
 \value{
-a list of the ICAO ID, WMO ID , day, hour, minute, precipitation,  
+a list of the ICAO location indicator, WMO ID , day, hour, minute, precipitation,  
 maximum and minimum temperature, dry and wet bulb, dew point and vapor pressure.
 }
 \description{

@@ -4,6 +4,8 @@
 #' 
 #' @param vekn character, the full strings of the \code{VEKN} code.\cr
 #'              Example: "VEKN20 HKNC 260600 63741 MAX 26.3 MIN 17.7 A/R NIL RH 81\%="
+#' @param stn_list a vector of character, containing a list of station names 
+#' for special case like "VEKN75 HKNC 040600 KITUI MAX 29.2 MIN 17.5 A/R NIL MM RH 60\%="
 #'  
 #' @return a list of the ICAO location indicator, WMO ID , day, hour, minute, precipitation,  
 #' maximum and minimum temperature, dry and wet bulb, dew point and vapor pressure.
@@ -28,7 +30,7 @@
 #' 
 #' @export
 
-get_Vekn_Data <- function(vekn){
+get_Vekn_Data <- function(vekn, stn_list = NULL){
     dec_comma <- gregexpr('[0-9]{2}\\,[0-9]', vekn)
     dec_comma <- dec_comma[[1]]
     if(dec_comma[1] != -1){
@@ -71,10 +73,22 @@ get_Vekn_Data <- function(vekn){
     }
 
     if(grepl("^[0-9]{5,}$", vk[4])){
-        # case: "VEKN71 HKJK 020600 63766 MAX 30.7 ..."
-        out$wmoID <- vk[4]
-        vekn <- paste0(vk[-(1:4)], collapse = " ")
-    }else if(grepl("^[A-Z]+$", vk[4])){
+        if(grepl("^[0-9]{5}$", vk[4])){
+            # case: "VEKN71 HKJK 020600 63766 MAX 30.7 ..."
+            out$wmoID <- vk[4]
+            vekn <- paste0(vk[-(1:4)], collapse = " ")
+        }else{
+            if(grepl("^[0-9]{5}$", vk[5])){
+                # case: "VEKN72 HKGA 040600 030600 63671 MAX 30.7 ..."
+                out$wmoID <- vk[5]
+                vekn <- paste0(vk[-(1:5)], collapse = " ")
+            }else{
+                # case: "VEKN73 HKKI 230600 638708 MAX 28.1 ..."
+                out$wmoID <- "UNKNOWN"
+                vekn <- paste0(vk[-(1:4)], collapse = " ")
+            }
+        }
+    }else if(grepl("^[A-Z]+$", vk[4]) & (vk[4] %in% stn_list)){
         # case: "VEKN75 HKNC 300600 KANGEMA MET ARF 0 ..."
         # case: "VEKN75 HKNC 210600 KITUI MAX 28.0 ..."
         out$wmoID <- vk[4]
@@ -88,7 +102,7 @@ get_Vekn_Data <- function(vekn){
             # 
             out$wmoID <- gsub(".*\\((.+)\\).*", "\\1", vk[4])
             vekn <- paste0(vk[-(1:4)], collapse = " ")
-        }else if(grepl("^[A-Z]+\\.*$", vk[4])){
+        }else if(grepl("^[A-Z]{5,}\\.+$", vk[4])){
             # case: "VEKN75 HKNC 020600 KITUI. MAX 29.0 ..."
             out$wmoID <- gsub('[^[:alpha:]]', '', vk[4])
             vekn <- paste0(vk[-(1:4)], collapse = " ")
