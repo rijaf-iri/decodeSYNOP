@@ -32,6 +32,7 @@ get_Vekn_Data <- function(vekn){
     dec_comma <- gregexpr('[0-9]{2}\\,[0-9]', vekn)
     dec_comma <- dec_comma[[1]]
     if(dec_comma[1] != -1){
+        # case: "VEKN73 HKKI 280600 63687 MA 29,9 MIN 16,8 AR NIL RH 76%="
         for(i in dec_comma){
             substr(vekn, i + 2, i + 2) <- '.'
         }
@@ -47,11 +48,13 @@ get_Vekn_Data <- function(vekn){
 
     vk <- trimws(strsplit(vekn, " ")[[1]])
     if(length(vk) >= 5){
+        # case: "VEKN20 HKNC 290000 63798 NIL="
         if(vk[5] == "NIL=") return(NULL)
     }
 
     acts <- grep("ACTUALS*", vk)
     if(length(acts) > 0){
+        # case: "VEKN72 HKGA 290600 ACTUALS 63671 MAX 30.5 ..."
         vk <- vk[-acts]
     }
 
@@ -68,18 +71,29 @@ get_Vekn_Data <- function(vekn){
     }
 
     if(grepl("^[0-9]{5,}$", vk[4])){
+        # case: "VEKN71 HKJK 020600 63766 MAX 30.7 ..."
+        out$wmoID <- vk[4]
+        vekn <- paste0(vk[-(1:4)], collapse = " ")
+    }else if(grepl("^[A-Z]+$", vk[4])){
+        # case: "VEKN75 HKNC 300600 KANGEMA MET ARF 0 ..."
+        # case: "VEKN75 HKNC 210600 KITUI MAX 28.0 ..."
         out$wmoID <- vk[4]
         vekn <- paste0(vk[-(1:4)], collapse = " ")
     }else{
         if(grepl("[A-Z]{4,}\\([0-9]{5,}\\)", vk[4])){
+            # case: "VEKN73 HKKI 130600 HKKR(63710) MX 22.7 ..."
+            # 
             # tmp <- regexec("\\((.*?)\\)", vk[4])
             # out$wmoID <- regmatches(vk[4], tmp)[[1]][2]
+            # 
             out$wmoID <- gsub(".*\\((.+)\\).*", "\\1", vk[4])
             vekn <- paste0(vk[-(1:4)], collapse = " ")
         }else if(grepl("^[A-Z]+\\.*$", vk[4])){
+            # case: "VEKN75 HKNC 020600 KITUI. MAX 29.0 ..."
             out$wmoID <- gsub('[^[:alpha:]]', '', vk[4])
             vekn <- paste0(vk[-(1:4)], collapse = " ")
         }else{
+            # case: "VEKN71 HKJK 260621 MAX 26.0 ..."
             out$wmoID <- "UNKNOWN"
             vekn <- paste0(vk[-(1:3)], collapse = " ")
         }
@@ -202,6 +216,7 @@ clean_vekn_variables <- function(strings, patterns){
                 n <- attr(expr, 'match.length')
                 vr <- substr(vk[j], 1, n - 1)
                 vl <- sub(vr, '', vk[j])
+                vl <- gsub('[^0-9.-]', '', vl)
                 vk[j] <- paste(vr, vl)
             }
         }
