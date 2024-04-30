@@ -161,10 +161,15 @@ get_Vekn_Data <- function(vekn, stn_list = NULL){
         vr <- vekn[ix + 1][1]
         if(ploc == precip & !is.na(vr)){
             rtrace <- tolower(substr(vr, 1, 2))
-            if(rtrace[1] == 'tr') vr <- '0.1'
+            if(rtrace[1] == 'tr'){
+                vr <- '0.1'
+            }else{
+               vr <- gsub("[^0-9.]", "", vr)
+            }
+        }else{
+            if(grepl('[a-zA-Z]', vr)) return(NA)
+            vr <- gsub("[^0-9.]", "", vr)
         }
-        if(grepl('[a-zA-Z]', vr)) return(NA)
-        vr <- gsub("[^0-9.]", "", vr)
         as.numeric(vr)
     })
     names(tmp) <- var_name
